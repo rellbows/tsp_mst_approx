@@ -47,7 +47,7 @@ vector<city> file_input(string a_filename){
 	// holds data getting pulled from file
 	string data;
 	// temporarily holds new city while getting data from file
-	city* temp_city = nullptr;
+	city* temp_city = NULL;
 
 	// open up user specified file
 	input_file.open(a_filename);
@@ -64,7 +64,7 @@ vector<city> file_input(string a_filename){
 			temp_city->y = stoi(data);
 			city_list.push_back(*temp_city);
 			delete temp_city;
-			temp_city = nullptr;
+			temp_city = NULL;
 		}
 		// close up file
 		input_file.close();
@@ -77,7 +77,7 @@ vector<edge> build_graph(vector<city> city_list){
 	// initialze vector to hold all the edges
 	vector<edge> edge_list;
 	// temporarily holds new edge while getting data
-	edge* temp_edge = nullptr;
+	edge* temp_edge = NULL;
 
 	for (int i = 0; i < city_list.size(); i++)
 	{
@@ -89,7 +89,7 @@ vector<edge> build_graph(vector<city> city_list){
 			temp_edge->weight = distance(city_list[i], city_list[j]);
 			edge_list.push_back(*temp_edge);
 			delete temp_edge;
-			temp_edge = nullptr;
+			temp_edge = NULL;
 		}
 	}
 
