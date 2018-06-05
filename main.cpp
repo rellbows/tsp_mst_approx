@@ -9,6 +9,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cmath>
+#include <cassert>
 
 using namespace std;
 
@@ -17,6 +19,23 @@ typedef struct {
 	int x;
 	int y;
 } city;
+
+typedef struct {
+	int i;
+	int j;
+	int weight;
+} edge;
+
+// utility function that calculates the distance from city to city
+// based off their x and y coords
+int distance(city i, city j){
+	float ans = sqrt(((i.x - j.x)*(i.x - j.x)) + ((i.y - j.y)*(i.y - j.y)));
+	if (ans - int(ans) >= 0.5)
+	{
+		ans = int(ans) + 1;
+	}
+	return int(ans);
+}
 
 // gets the x and y coords for the cities from user specified file
 vector<city> file_input(string a_filename){
@@ -54,14 +73,44 @@ vector<city> file_input(string a_filename){
 	return city_list;
 }
 
+vector<edge> build_graph(vector<city> city_list){
+	// initialze vector to hold all the edges
+	vector<edge> edge_list;
+	// temporarily holds new edge while getting data
+	edge* temp_edge = nullptr;
+
+	for (int i = 0; i < city_list.size(); i++)
+	{
+		for (int j = i + 1; j < city_list.size(); j++)
+		{
+			temp_edge = new edge;
+			temp_edge->i = i;
+			temp_edge->j = j;
+			temp_edge->weight = distance(city_list[i], city_list[j]);
+			edge_list.push_back(*temp_edge);
+			delete temp_edge;
+			temp_edge = nullptr;
+		}
+	}
+
+	assert(edge_list.size() == ((city_list.size() * (city_list.size() - 1))/2));
+
+	return edge_list;
+
+}
+
 int main(int argc, char* argv[]){
 
 	// intialize var to hold name of file to open up
 	char* input_filename = argv[1];
 	// holds list of cities
 	vector<city> city_list;
+	// holds list of edges
+	vector<edge> edge_list;
 
 	city_list = file_input(input_filename);
+
+	edge_list = build_graph(city_list);
 
 	return 0;
 }
