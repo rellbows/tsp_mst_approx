@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -18,29 +19,49 @@ typedef struct {
 } city;
 
 // gets the x and y coords for the cities from user specified file
-city* file_input(string a_filename){
+vector<city> file_input(string a_filename){
 
-	// intialize a pointer to hold a list of cities
-	city* city_list = NULL;
+	// initial vector to hold list or cities
+	vector<city> city_list;
 	// initialize file stream to get list of cities
 	ifstream input_file;
+	// holds data getting pulled from file
+	string data;
+	// temporarily holds new city while getting data from file
+	city* temp_city = nullptr;
 
 	// open up user specified file
 	input_file.open(a_filename);
 
-
-
-	// close up file
-	input_file.close();
+	if(!input_file.is_open()){
+		cout << "Unable to open file." << endl;
+	}
+	else{
+		while(input_file >> data){
+			temp_city = new city;
+			input_file >> data;
+			temp_city->x = stoi(data);
+			input_file >> data;
+			temp_city->y = stoi(data);
+			city_list.push_back(*temp_city);
+			delete temp_city;
+			temp_city = nullptr;
+		}
+		// close up file
+		input_file.close();
+	}
 
 	return city_list;
 }
 
-int main(int argc, string* argv){
+int main(int argc, char* argv[]){
 
 	// intialize var to hold name of file to open up
-	string input_filename;
+	char* input_filename = argv[1];
+	// holds list of cities
+	vector<city> city_list;
 
+	city_list = file_input(input_filename);
 
 	return 0;
 }
