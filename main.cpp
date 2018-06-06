@@ -73,6 +73,7 @@ vector<city> file_input(string a_filename){
 	return city_list;
 }
 
+/* TESTING mod_build_graph
 vector<edge> build_graph(vector<city> city_list){
 	// initialze vector to hold all the edges
 	vector<edge> edge_list;
@@ -98,6 +99,18 @@ vector<edge> build_graph(vector<city> city_list){
 	return edge_list;
 
 }
+*/
+
+void build_graph(vector<city> city_list, int** city_graph){
+	for(int i = 0; i < city_list.size(); i++){
+		for (int j = 0; j < city_list.size(); j++)
+		{
+			city_graph[i][j] = distance(city_list[i], city_list[j]);
+		}
+	}
+}
+
+
 
 int main(int argc, char* argv[]){
 
@@ -105,12 +118,38 @@ int main(int argc, char* argv[]){
 	char* input_filename = argv[1];
 	// holds list of cities
 	vector<city> city_list;
+	// holds number of cities
+	int num_cities;
+	// holds graph with distance between cities
+	int** city_graph = NULL;
+	
+	// TESTING mod_build_graph
 	// holds list of edges
-	vector<edge> edge_list;
+	//vector<edge> edge_list;
 
 	city_list = file_input(input_filename);
 
-	edge_list = build_graph(city_list);
+	// TESTING mod_build_graph
+	//edge_list = build_graph(city_list);
+
+	num_cities = city_list.size();
+
+	// make city graph
+	city_graph = new int*[num_cities];
+	for(int i = 0; i < num_cities; i++){
+		city_graph[i] = new int[num_cities];
+	}
+
+	build_graph(city_list, city_graph);
+
+	for (int i = 0; i < num_cities; ++i)
+	{
+		for (int j = 0; j < num_cities; ++j)
+		{
+			cout << city_graph[i][j] << " ";
+		}
+		cout << endl;
+	}
 
 	return 0;
 }
